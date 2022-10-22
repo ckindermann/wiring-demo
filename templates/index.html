@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %} 
+<h1>Wiring Web App (Demo)</h1>
+
+<div class="content">
+    <form action="/" method="POST">
+        <!-- <input type="text" name="content" id="content"> -->
+        <p><b>Input</b></p>
+        <textarea name="input" id="content" rows="10" cols="30">{{ inputWiring }}</textarea>
+        <p><b>Output</b></p>
+        <textarea name="output" id="content" rows="10" cols="30">{{ outputWiring }}</textarea> 
+
+        <p><b>Data Formats</b></p>
+
+        <select name="in_select" class="selectpicker form-control">
+          {% for o in input_formats %}
+              <!-- <option value="{{ o.name }}">{{ o.name }}</option> -->
+               <option value="{{ o }}">{{ o }}</option>
+          {% endfor %}
+        </select>
+
+        <input type="submit" name="translate" value="translate to"> 
+
+        <select name="out_select" class="selectpicker form-control">
+          {% for o in output_formats %}
+              <!-- <option value="{{ o.name }}">{{ o.name }}</option> -->
+               <option value="{{ o }}">{{ o }}</option>
+          {% endfor %}
+        </select>
+
+        <p><b>Examples</b></p> 
+        <input type="submit" name="load_example" value="Load Example"> 
+    </form> 
+</div> 
+
+{% endblock %}
