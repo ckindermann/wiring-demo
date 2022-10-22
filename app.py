@@ -54,6 +54,10 @@ def index():
 
     if request.method == "POST":
 
+        previous_in_format = request.form["in_select"]
+        previous_out_format = request.form["out_select"]
+        # {"selected_item": "team_polo"}
+
         if "translate" in request.form:
 
             # get input graph from form
@@ -74,15 +78,12 @@ def index():
                 translation = translate(a)
                 res += translation + "\n"
 
-            # TODO: parse input as lines
-            # TODO: parse input to output conversion
-            # TODO: translate input with wiring
-            # TODO: put translation into output window
-
         return render_template(
             "index.html",
-            # inputWiring=in_format,
+            inputWiring=input,
             outputWiring=res,
+            previous_in_format=previous_in_format,
+            previous_out_format=previous_out_format,
             input_formats=input_formats,
             output_formats=output_formats,
         )

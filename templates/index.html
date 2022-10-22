@@ -17,9 +17,8 @@
         <p><b>Data Formats</b></p>
 
         <select name="in_select" class="selectpicker form-control">
-          {% for o in input_formats %}
-              <!-- <option value="{{ o.name }}">{{ o.name }}</option> -->
-               <option value="{{ o }}">{{ o }}</option>
+          {% for i in input_formats %}
+               <option value="{{ i }}"{% if i == previous_in_format %} selected{% endif %}>{{ i }}</option> 
           {% endfor %}
         </select>
 
@@ -28,7 +27,7 @@
         <select name="out_select" class="selectpicker form-control">
           {% for o in output_formats %}
               <!-- <option value="{{ o.name }}">{{ o.name }}</option> -->
-               <option value="{{ o }}">{{ o }}</option>
+               <option value="{{ o }}"{% if o == previous_out_format %} selected{% endif %}>{{ o }}</option> 
           {% endfor %}
         </select>
 
