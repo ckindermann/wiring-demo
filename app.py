@@ -4,6 +4,7 @@ from flask import (
     request,
 )
 import wiring_rs
+import ldtab_rs
 
 app = Flask(__name__)
 
@@ -44,7 +45,7 @@ def get_translation(input_format, out_format):
 def index():
 
     # input_formats = ["LDTab", "OFN", "RDFXML", "Turtle", "N-Triples"]
-    input_formats = ["LDTab", "OFN"]
+    input_formats = ["LDTab", "OFN", "RDFXML"]
 
     output_formats = [
         "LDTab",
@@ -58,6 +59,20 @@ def index():
         previous_out_format = request.form["out_select"]
         # {"selected_item": "team_polo"}
 
+        if "switch" in request.form:
+            input = request.form["input"]
+            output = request.form["output"]
+
+            return render_template(
+                "index.html",
+                inputWiring=output,
+                outputWiring=input,
+                previous_in_format=previous_in_format,
+                previous_out_format=previous_out_format,
+                input_formats=input_formats,
+                output_formats=output_formats,
+            )
+
         if "translate" in request.form:
 
             # get input graph from form
@@ -69,14 +84,33 @@ def index():
             select = request.form.get("out_select")
             out_format = str(select)
 
-            # get format conversion function
-            translate = get_translation(in_format, out_format)
+            # RDFXML write to tmp file
+            if in_format == "RDFXML":
+                f = open("tmp/ont.owl", "w")
+                f.write(input)
+                f.close()
 
-            # translate input line by line (so there is no support for typing)
-            res = ""
-            for a in input.splitlines():
-                translation = translate(a)
-                res += translation + "\n"
+                # RDFXML -> LDTab
+                triples = ldtab_rs.import_thick_triples("tmp/ont.owl")
+
+                # TODO translate here?
+                translate = get_translation("LDTab", out_format)
+
+                res = ""
+                for t in triples:
+                    translation = translate(t)
+                    res += translation + "\n"
+
+            else:
+
+                # get format conversion function
+                translate = get_translation(in_format, out_format)
+
+                # translate input line by line (so there is no support for typing)
+                res = ""
+                for a in input.splitlines():
+                    translation = translate(a)
+                    res += translation + "\n"
 
         return render_template(
             "index.html",
