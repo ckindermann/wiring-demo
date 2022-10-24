@@ -40,6 +40,13 @@
 
         <p><b>Examples</b></p> 
         <input type="submit" name="load_example" value="Load Example"> 
+
+        <select name="example_select" class="selectpicker form-control">
+          {% for e in examples %}
+               <option value="{{ e }}"{% if e == previous_example_format %} selected{% endif %}>{{ e }}</option> 
+          {% endfor %}
+        </select>
+
     </form> 
 </div> 
 

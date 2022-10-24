@@ -53,10 +53,17 @@ def index():
         "Manchester",
     ]
 
+    examples = [
+        "OFN",
+        "LDTab",
+        "RDFXML",
+    ]
+
     if request.method == "POST":
 
         previous_in_format = request.form["in_select"]
         previous_out_format = request.form["out_select"]
+        previous_example_format = request.form["example_select"]
         # {"selected_item": "team_polo"}
 
         if "switch" in request.form:
@@ -69,8 +76,30 @@ def index():
                 outputWiring=input,
                 previous_in_format=previous_in_format,
                 previous_out_format=previous_out_format,
+                previous_example_format=previous_example_format,
                 input_formats=input_formats,
                 output_formats=output_formats,
+                examples=examples,
+            )
+
+        if "load_example" in request.form:
+            select = request.form["example_select"]
+            example = str(select)
+
+            f = open("examples/" + example, "r")
+            example_data = f.read()
+            f.close()
+
+            return render_template(
+                "index.html",
+                inputWiring=example_data,
+                # outputWiring=res,
+                previous_in_format=previous_in_format,
+                previous_out_format=previous_out_format,
+                previous_example_format=previous_example_format,
+                input_formats=input_formats,
+                output_formats=output_formats,
+                examples=examples,
             )
 
         if "translate" in request.form:
@@ -118,8 +147,10 @@ def index():
             outputWiring=res,
             previous_in_format=previous_in_format,
             previous_out_format=previous_out_format,
+            previous_example_format=previous_example_format,
             input_formats=input_formats,
             output_formats=output_formats,
+            examples=examples,
         )
 
     else:
@@ -129,6 +160,7 @@ def index():
             "index.html",
             input_formats=input_formats,
             output_formats=output_formats,
+            examples=examples,
         )
 
 
